@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Dapper;
 using HelloWorld.Models;
@@ -19,17 +20,36 @@ namespace HelloWorld
 
             DateTime rightNow = dbConnection.QuerySingle<DateTime>(sqlCommand);
 
-            System.Console.WriteLine(rightNow);
-            // Computer computer = new Computer
-            // {
-            //     MotherBoard = "ASUS",
-            //     CPUCores = 4,
-            //     HasWifi = true,
-            //     HasLTE = false,
-            //     ReleaseDate = new DateTime(2020, 1, 1),
-            //     Price = 1000,
-            //     VideoCard = "Nvidia"
-            // };
+            System.Console.WriteLine(rightNow.ToString());
+
+            Computer computer = new Computer
+            {
+                MotherBoard = "Z690",
+                HasWifi = true,
+                HasLTE = false,
+                ReleaseDate = DateTime.Now,
+                Price = 943.87m,
+                VideoCard = "RTX 2060"
+            };
+            string sql = @"INSERT INTO TutorialAppSchema.Computer(
+                MotherBoard,
+                HasWifi,
+                HasLTE,
+                ReleaseDate,
+                Price,
+                VideoCard
+                ) VALUES('" + computer.MotherBoard
+                    + "','" + computer.HasWifi
+                    + "','" + computer.HasLTE
+                    + "','" + computer.ReleaseDate.ToString("yyyy-MM-dd")
+                    + "','" + computer.Price.ToString("0.00", CultureInfo.InvariantCulture)
+                    + "','" + computer.VideoCard
+                  + "')";
+
+            System.Console.WriteLine(sql);
+            int result = dbConnection.Execute(sql);
+
+            System.Console.WriteLine(result);
             // computer.HasWifi = false;
             // Console.WriteLine($"Computer MotherBoard: {computer.MotherBoard}");
             // Console.WriteLine($"Computer CPUCores: {computer.CPUCores}");
