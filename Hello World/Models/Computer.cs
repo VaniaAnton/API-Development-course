@@ -3,8 +3,9 @@ namespace HelloWorld.Models
 {
     public class Computer
     {
+        public int ComputerId { get; set; }
         public string MotherBoard { get; set; } = "";
-        public int CPUCores { get; set; }
+        public int? CPUCores { get; set; } = 0;
         public bool HasWifi { get; set; }
         public bool HasLTE { get; set; }
 
