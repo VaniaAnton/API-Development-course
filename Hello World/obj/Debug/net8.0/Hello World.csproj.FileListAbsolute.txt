@@ -67,3 +67,10 @@
 /Users/5_vania_5/Desktop/Udemy/API Development/Hello World/obj/Debug/net8.0/Hello World.csproj.AssemblyReference.cache
 /Users/5_vania_5/Desktop/Udemy/API Development/Hello World/obj/Debug/net8.0/Hello Wo.F2EBC272.Up2Date
 /Users/5_vania_5/Desktop/Udemy/API Development/Hello World/obj/Debug/net8.0/Hello World.sourcelink.json
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.Configuration.FileExtensions.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Json.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Physical.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.FileSystemGlobbing.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/appsettings.json
