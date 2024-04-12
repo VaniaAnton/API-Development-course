@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Data;
 using System.Globalization;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Dapper;
 using HelloWorld.Data;
 using HelloWorld.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace HelloWorld
 {
@@ -17,41 +20,68 @@ namespace HelloWorld
             IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
 
+            DataContextDapper dapper = new DataContextDapper(configuration);
 
-            Computer computer = new Computer
+
+
+            // File.WriteAllText("log.txt", sql);
+            //using StreamWriter openFile = new("log.txt", append: true);
+
+            //openFile.WriteLine(sql);
+
+            string computersJson = File.ReadAllText("Computers.json");
+
+            //  System.Console.WriteLine(computersJson);
+            // JsonSerializerOptions options = new JsonSerializerOptions()
+            // {
+            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            // };
+
+            IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson);
+
+            IEnumerable<Computer>? computersNewtonSoft = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
+
+            if (computersNewtonSoft != null)
             {
-                MotherBoard = "Z690",
-                HasWifi = true,
-                HasLTE = false,
-                ReleaseDate = DateTime.Now,
-                Price = 943.87m,
-                VideoCard = "RTX 2060"
-            };
-
-
-            string sql = @"INSERT INTO TutorialAppSchema.Computer(
-                MotherBoard,
+                foreach (Computer computer in computersNewtonSoft)
+                {
+                    // System.Console.WriteLine(computer.Motherboard);
+                    string sql = @"INSERT INTO TutorialAppSchema.Computer(
+                Motherboard,
                 HasWifi,
                 HasLTE,
                 ReleaseDate,
                 Price,
                 VideoCard
-                ) VALUES('" + computer.MotherBoard
-                    + "','" + computer.HasWifi
-                    + "','" + computer.HasLTE
-                    + "','" + computer.ReleaseDate.ToString("yyyy-MM-dd")
-                    + "','" + computer.Price.ToString("0.00", CultureInfo.InvariantCulture)
-                    + "','" + computer.VideoCard
-                  + "')";
+                ) VALUES('" + EscapeSingleQuote(computer.Motherboard)
+                   + "','" + computer.HasWifi
+                   + "','" + computer.HasLTE
+                   + "','" + computer.ReleaseDate
+                   + "','" + computer.Price.ToString("0.00", CultureInfo.InvariantCulture)
+                   + "','" + EscapeSingleQuote(computer.VideoCard)
+                 + "')";
 
+                    dapper.ExecuteSql(sql);
+                }
+            }
 
-            File.WriteAllText("log.txt", sql);
-            //using StreamWriter openFile = new("log.txt", append: true);
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
 
-            //openFile.WriteLine(sql);
+            string computersCopyNewtonsoft = JsonConvert.SerializeObject(computersNewtonSoft, settings);
+            File.WriteAllText("computersCopyNewtonsoft.txt", computersCopyNewtonsoft);
 
-            System.Console.WriteLine(File.ReadAllText("log.txt"));
+            string computerCopySystem = System.Text.Json.JsonSerializer.Serialize(computersSystem);
+            File.WriteAllText("computersCopySystem.txt", computerCopySystem);
+        }
 
+        static string EscapeSingleQuote(string input)
+        {
+            string output = input.Replace("'", "''");
+
+            return output;
         }
     }
 }
