@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "VZNUqhesh9y+JJrCPFdeBmkEWDjXsrXlUqHJ87V8F7+k+0wINpRvvxS0Ch4FqoZ8rJhPbJ6SC2C5caRGfrLocQ==",
+  "dgSpecHash": "tHnWDKjlO26RUPzRi5rZODfI+F69rnaD6e6f3AoPJY6YhgyXIfhjeK1ICFX4Abw05S5919hx8CnBEWs+lQrefQ==",
   "success": true,
   "projectFilePath": "/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/Hello World.csproj",
   "expectedPackageFiles": [
+    "/Users/5_vania_5/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
     "/Users/5_vania_5/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/Users/5_vania_5/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
     "/Users/5_vania_5/.nuget/packages/dapper/2.1.35/dapper.2.1.35.nupkg.sha512",

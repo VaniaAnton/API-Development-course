@@ -75,3 +75,4 @@
 /Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Microsoft.Extensions.FileSystemGlobbing.dll
 /Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/appsettings.json
 /Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/Newtonsoft.Json.dll
+/Users/5_vania_5/Desktop/Udemy/API Development/Hello World/bin/Debug/net8.0/AutoMapper.dll
