@@ -18,13 +18,36 @@ public class UserController : ControllerBase
         return _dapper.LoadDataSingle<DateTime>("SELECT GEGTDATE()");
     }
 
-    [HttpGet("GetUsers/{testValue}")]
+    [HttpGet("GetUsers")]
     // public IActionResult Test()
-    public string[] GetUsers(string testValue)
+    public IEnumerable<User> GetUsers()
     {
-        string[] responseArray = new string[]{
-            testValue
-        };
-        return responseArray;
+        string sql = @"
+            SELECT [UserId], 
+                    [FirstName],
+                    [LastName],
+                    [Email],
+                    [Gender],
+                    [Active]
+            FROM TutorialAppSchema.Users";
+        IEnumerable<User> users = _dapper.LoadData<User>(sql);
+        return users;
+
+    }
+
+    [HttpGet("GetSingleUsers/{userId}")]
+    public User GetSingleUsers(int userId)
+    {
+        string sql = @"
+            SELECT [UserId], 
+                [FirstName],
+                [LastName],
+                [Email],
+                [Gender],
+                [Active]
+            FROM TutorialAppSchema.Users
+                WHERE UserId = " + userId.ToString();//"7"
+        User user = _dapper.LoadDataSingle<User>(sql);
+        return user;
     }
 }
