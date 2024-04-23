@@ -1,3 +1,6 @@
+using DotnetAPI.Data;
+using DotnetAPI.DTOs;
+using DotnetAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
