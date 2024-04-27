@@ -1,8 +1,9 @@
 USE DotNetCourseDatabase
 GO 
 
-
-SELECT [UserId], 
+SELECT * FROM TutorialAppSchema.UserSalary
+DELETE FROM TutorialAppSchema.Users WHERE UserId = 1001
+ SELECT [UserId], 
     [FirstName],
     [LastName],
     [Email],
@@ -11,27 +12,27 @@ SELECT [UserId],
 FROM TutorialAppSchema.Users
 ORDER BY UserId DESC
 
-INSERT INTO TutorialAppSchema.Users(
-    [FirstName],
-    [LastName],
-    [Email],
-    [Gender],
-    [Active]
-) VALUES(
-    [FirstName],
-    [LastName],
-    [Email],
-    [Gender],
-    [Active]
-)
+-- INSERT INTO TutorialAppSchema.Users(
+--     [FirstName],
+--     [LastName],
+--     [Email],
+--     [Gender],
+--     [Active]
+-- ) VALUES(
+--     [FirstName],
+--     [LastName],
+--     [Email],
+--     [Gender],
+--     [Active]
+-- )
 
-UPDATE TutorialAppSchema.Users
-    SET [FirstName] = 'Albertina',
-    [LastName] = 'ivan',
-    [Email] = 'aofinan0@blogspot.com',
-    [Gender] = 'Female',
-    [Active] = 1
-    WHERE UserId = 1
+-- UPDATE TutorialAppSchema.Users
+--     SET [FirstName] = 'Albertina',
+--     [LastName] = 'ivan',
+--     [Email] = 'aofinan0@blogspot.com',
+--     [Gender] = 'Female',
+--     [Active] = 1
+--     WHERE UserId = 1
 
 
 

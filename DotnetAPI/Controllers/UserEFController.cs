@@ -229,6 +229,6 @@ public class UserEFController : ControllerBase
             throw new Exception("Deleting UserJobInfo failed on save");
         }
         throw new Exception("Failed to find UserJobInfo to delete");
-    }
+    } 
 
 }
