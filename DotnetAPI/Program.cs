@@ -1,3 +1,5 @@
+using DotnetAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -23,6 +25,8 @@ builder.Services.AddCors((options) =>
             .AllowCredentials();
     });
 });
+//connection for interface and class
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
