@@ -90,7 +90,7 @@ public class UserController : ControllerBase
                 "', '" + user.Email +
                 "', '" + user.Gender +
                 "', '" + user.Active +
-                "')";
+            "')";
         System.Console.WriteLine(sql);
         if (_dapper.ExecuteSql(sql))
         {
