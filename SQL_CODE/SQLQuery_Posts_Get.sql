@@ -22,3 +22,5 @@ BEGIN
                 OR Posts.PostContent LIKE '%' + @SearchValue + '%'
                 OR Posts.PostTitle LIKE '%' + @SearchValue + '%')
 END
+
+SELECT * FROM TutorialAppSchema.Posts

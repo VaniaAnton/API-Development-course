@@ -3,17 +3,15 @@ using DotnetAPI.DTOs;
 using DotnetAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
+
 namespace DotnetAPI.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-
     public class PostController : ControllerBase
     {
         private readonly DataContextDapper _dapper;
-
         public PostController(IConfiguration config)
         {
             _dapper = new DataContextDapper(config);
@@ -22,8 +20,9 @@ namespace DotnetAPI.Controllers
         [HttpGet("Posts/{postId}/{userId}/{searchParam}")]
         public IEnumerable<Post> GetPosts(int postId = 0, int userId = 0, string searchParam = "None")
         {
-            string sql = @" EXEC TutorialAppSchema.spPosts_Get";
+            string sql = @"EXEC TutorialAppSchema.spPosts_Get";
             string parameters = "";
+
             if (postId != 0)
             {
                 parameters += ", @PostId=" + postId.ToString();
@@ -34,8 +33,9 @@ namespace DotnetAPI.Controllers
             }
             if (searchParam.ToLower() != "none")
             {
-                parameters += ", @SearchValue= '" + searchParam + "' ";
+                parameters += ", @SearchValue='" + searchParam + "'";
             }
+
             if (parameters.Length > 0)
             {
                 sql += parameters.Substring(1);
@@ -47,7 +47,7 @@ namespace DotnetAPI.Controllers
         [HttpGet("MyPosts")]
         public IEnumerable<Post> GetMyPosts()
         {
-            string sql = @" EXEC TutorialAppSchema.spPosts_Get @UserId = " +
+            string sql = @"EXEC TutorialAppSchema.spPosts_Get @UserId = " +
                 this.User.FindFirst("userId")?.Value;
 
             return _dapper.LoadData<Post>(sql);
@@ -56,7 +56,7 @@ namespace DotnetAPI.Controllers
         [HttpPut("UpsertPost")]
         public IActionResult UpsertPost(Post postToUpsert)
         {
-            string sql = @"EXEC TutorialAppSchema.spPost_Upsert
+            string sql = @"EXEC TutorialAppSchema.spPosts_Upsert
                 @UserId =" + this.User.FindFirst("userId")?.Value +
                 ", @PostTitle ='" + postToUpsert.PostTitle +
                 "', @PostContent ='" + postToUpsert.PostContent + "'";
@@ -78,22 +78,17 @@ namespace DotnetAPI.Controllers
         [HttpDelete("Post/{postId}")]
         public IActionResult DeletePost(int postId)
         {
-            string sql = @"DELETE FROM TutorialAppSchema.Posts 
-            WHERE PostId = " + postId.ToString() +
-            "AND UserId = " + this.User.FindFirst("userId")?.Value; ;
+            string sql = @"EXEC TutorialAppSchema.spPost_Delete @PostId = " +
+                    postId.ToString() +
+                    ", @UserId = " + this.User.FindFirst("userId")?.Value;
+
 
             if (_dapper.ExecuteSql(sql))
             {
                 return Ok();
             }
-            throw new Exception("Failed to delete post");
+
+            throw new Exception("Failed to delete post!");
         }
-
-
-
-
     }
-
-
-
 }
