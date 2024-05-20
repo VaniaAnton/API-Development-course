@@ -85,16 +85,16 @@ namespace DotnetAPI.Helper
             // ('email', 'pasword', 'dwwd')
             List<SqlParameter> sqlParameters = new List<SqlParameter>();
 
-            SqlParameter emailParameter = new SqlParameter(@"EmailParam", SqlDbType.VarChar);
+            SqlParameter emailParameter = new SqlParameter("@EmailParam", SqlDbType.VarChar);
             emailParameter.Value = userForSetPassword.Email;
             sqlParameters.Add(emailParameter);
 
 
-            SqlParameter passwordSaltParameter = new SqlParameter(@"PasswordSaltParam", SqlDbType.VarBinary);
+            SqlParameter passwordSaltParameter = new SqlParameter("@PasswordSaltParam", SqlDbType.VarBinary);
             passwordSaltParameter.Value = passwordSalt;
             sqlParameters.Add(passwordSaltParameter);
 
-            SqlParameter passwordHashParameter = new SqlParameter(@"PasswordHashParam", SqlDbType.VarBinary);
+            SqlParameter passwordHashParameter = new SqlParameter("@PasswordHashParam", SqlDbType.VarBinary);
             passwordHashParameter.Value = passwordHash;
             sqlParameters.Add(passwordHashParameter);
 

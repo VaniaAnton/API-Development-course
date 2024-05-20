@@ -14,7 +14,6 @@ namespace DotnetAPI.Data
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-
         public IEnumerable<T> LoadData<T>(string sql)
         {
             //get data from JSON by GetConnectionString()
@@ -25,6 +24,17 @@ namespace DotnetAPI.Data
         {
             IDbConnection dbConnection = new SqlConnection(_connectionString);
             return dbConnection.QuerySingle<T>(sql);
+        }
+        public IEnumerable<T> LoadDataWithParameters<T>(string sql, DynamicParameters parameters)
+        {
+            //get data from JSON by GetConnectionString()
+            IDbConnection dbConnection = new SqlConnection(_connectionString);
+            return dbConnection.Query<T>(sql, parameters);
+        }
+        public T LoadDataSingleWithParameters<T>(string sql, DynamicParameters parameters)
+        {
+            IDbConnection dbConnection = new SqlConnection(_connectionString);
+            return dbConnection.QuerySingle<T>(sql, parameters);
         }
         public bool ExecuteSql(string sql)
         {
@@ -40,7 +50,7 @@ namespace DotnetAPI.Data
         public bool ExecuteSqlWithParameters(string sql, List<SqlParameter> parameters)
         {
             SqlCommand commandWithParams = new SqlCommand(sql);
-            
+
             foreach (SqlParameter parameter in parameters)
             {
                 commandWithParams.Parameters.Add(parameter);
