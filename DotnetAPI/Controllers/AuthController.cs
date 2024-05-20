@@ -43,34 +43,12 @@ namespace DotnetAPI.Controllers
                 IEnumerable<string> existingUsers = _dapper.LoadData<string>(sqlCheckUserExist);
                 if (existingUsers.Count() == 0)
                 {
-                    byte[] passwordSalt = new byte[128 / 8];
-                    using (RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create())
+                    UserForLoginDto userForSetPassword = new UserForLoginDto()
                     {
-                        randomNumberGenerator.GetNonZeroBytes(passwordSalt);
-                    }
-                    byte[] passwordHash = _authHelper.GetPasswordHash(userForRegistration.Password, passwordSalt);
-
-                    string sqlAddAuth = @"EXEC TutorialAppSchema.spRegistration_Upsert 
-                        @Email = @EmailParam, 
-                        @PasswordHash = @PasswordHashParam, 
-                        @PasswordSalt = @PasswordSaltParam ";
-                    // ('email', 'pasword', 'dwwd')
-                    List<SqlParameter> sqlParameters = new List<SqlParameter>();
-
-                    SqlParameter emailParameter = new SqlParameter(@"EmailParam", SqlDbType.VarChar);
-                    emailParameter.Value = userForRegistration.Email;
-                    sqlParameters.Add(emailParameter);
-
-
-                    SqlParameter passwordSaltParameter = new SqlParameter(@"PasswordSaltParam", SqlDbType.VarBinary);
-                    passwordSaltParameter.Value = passwordSalt;
-                    sqlParameters.Add(passwordSaltParameter);
-
-                    SqlParameter passwordHashParameter = new SqlParameter(@"PasswordHashParam", SqlDbType.VarBinary);
-                    passwordHashParameter.Value = passwordHash;
-                    sqlParameters.Add(passwordHashParameter);
-
-                    if (_dapper.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters))
+                        Email = userForRegistration.Email,
+                        Password = userForRegistration.Password
+                    };
+                    if (_authHelper.SetPassword(userForSetPassword))
                     {
 
                         string sqlAddUser = @"EXEC TutorialAppSchema.spUser_Upsert
@@ -94,6 +72,16 @@ namespace DotnetAPI.Controllers
                 throw new Exception("User with this email already existed!  ");
             }
             throw new Exception("Password does not match");
+        }
+
+        [HttpPut("ResetPassword")]
+        public IActionResult ResetPassword(UserForLoginDto userForSetPassword)
+        {
+            if (_authHelper.SetPassword(userForSetPassword))
+            {
+                return Ok();
+            }
+            throw new Exception("Failed to update password");
         }
 
         [AllowAnonymous]
