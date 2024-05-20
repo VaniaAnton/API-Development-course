@@ -13,6 +13,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using DotnetAPI.Helper;
 using Dapper;
+using DotnetAPI.Helpers;
+using AutoMapper;
 
 namespace DotnetAPI.Controllers
 {
@@ -23,13 +25,22 @@ namespace DotnetAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly DataContextDapper _dapper;
+        private readonly ReusableSql _reusableSql;
 
         private readonly AuthHelper _authHelper;
+        private readonly IMapper _mapper;
+
+
 
         public AuthController(IConfiguration config)
         {
             _dapper = new DataContextDapper(config);
             _authHelper = new AuthHelper(config);
+            _reusableSql = new ReusableSql(config);
+            _mapper = new Mapper(new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserForRegistrationDto, UserComplete>();
+            }));
         }
 
         [AllowAnonymous]
@@ -51,18 +62,10 @@ namespace DotnetAPI.Controllers
                     };
                     if (_authHelper.SetPassword(userForSetPassword))
                     {
-
-                        string sqlAddUser = @"EXEC TutorialAppSchema.spUser_Upsert
-                            @FirstName = '" + userForRegistration.FirstName +
-                            "', @LastName = '" + userForRegistration.LastName +
-                            "', @Email = '" + userForRegistration.Email +
-                            "', @Gender = '" + userForRegistration.Gender +
-                            "', @Active = 1" +
-                            ", @JobTitle = '" + userForRegistration.JobTitle +
-                            "', @Department = '" + userForRegistration.Department +
-                            "', @Salary = " + userForRegistration.Salary;
-                        System.Console.WriteLine(sqlAddUser);
-                        if (_dapper.ExecuteSql(sqlAddUser))
+                        UserComplete userComplete = _mapper.Map<UserComplete>(userForRegistration);
+                        userComplete.Active = true;
+                        
+                        if (_reusableSql.UpsertUser(userComplete))
                         {
                             return Ok();
                         }
