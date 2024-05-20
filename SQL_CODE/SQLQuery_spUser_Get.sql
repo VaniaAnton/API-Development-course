@@ -92,15 +92,12 @@ BEGIN
         [Users].[Active],
         UserSalary.Salary,
         UserJobInfo.Department,
-        UserJobInfo.JobTitle,
-        AvgSalary.AvgSalary
+        UserJobInfo.JobTitle
     FROM TutorialAppSchema.Users AS Users 
         LEFT JOIN TutorialAppSchema.UserSalary AS UserSalary
             ON UserSalary.UserId = Users.UserId
         LEFT JOIN TutorialAppSchema.UserJobInfo AS UserJobInfo
             ON UserJobInfo.UserId = Users.UserId
-        LEFT JOIN #AverageDeptSalary AS AvgSalary
-            ON AvgSalary.Department = UserJobInfo.Department
         -- OUTER APPLY (
         --     SELECT AVG(UserSalary2.Salary) AvgSalary
         --     FROM TutorialAppSchema.Users AS Users 
@@ -146,15 +143,12 @@ BEGIN
         [Users].[Active],
         UserSalary.Salary,
         UserJobInfo.Department,
-        UserJobInfo.JobTitle,
-        AvgSalary.AvgSalary
+        UserJobInfo.JobTitle
     FROM TutorialAppSchema.Users AS Users 
         LEFT JOIN TutorialAppSchema.UserSalary AS UserSalary
             ON UserSalary.UserId = Users.UserId
         LEFT JOIN TutorialAppSchema.UserJobInfo AS UserJobInfo
             ON UserJobInfo.UserId = Users.UserId
-        LEFT JOIN #AverageDeptSalary AS AvgSalary
-            ON AvgSalary.Department = UserJobInfo.Department
         WHERE Users.UserId = ISNULL(@UserId, Users.UserId)
             AND ISNULL(Users.Active, 0) = COALESCE(@Active, Users.Active, 0)
 END
