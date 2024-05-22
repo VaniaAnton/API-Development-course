@@ -1,25 +1,66 @@
-USE DotNetCourseDatabase
-GO 
+USE DotNetCourseDatabase;
+GO
 
 CREATE OR ALTER PROCEDURE TutorialAppSchema.spUser_Upsert
-	@FirstName NVARCHAR(50) ,
-	@LastName NVARCHAR(50) ,
-	@Email NVARCHAR(50) ,
+	@FirstName NVARCHAR(50),
+	@LastName NVARCHAR(50),
+	@Email NVARCHAR(50),
+	@Gender NVARCHAR(50),
+	@Active BIT = 1,
+	@UserId INT = NULL
+AS
+BEGIN
+    IF NOT EXISTS (SELECT * FROM TutorialAppSchema.Users WHERE UserId = @UserId)
+        BEGIN
+        IF NOT EXISTS (SELECT * FROM TutorialAppSchema.Users WHERE Email = @Email)
+            BEGIN
+                INSERT INTO TutorialAppSchema.Users(
+                    [FirstName],
+                    [LastName],
+                    [Email],
+                    [Gender],
+                    [Active]
+                ) VALUES (
+                    @FirstName,
+                    @LastName,
+                    @Email,
+                    @Gender,
+                    @Active
+                )
+            END
+        END
+    ELSE 
+        BEGIN
+            UPDATE TutorialAppSchema.Users 
+                SET FirstName = @FirstName,
+                    LastName = @LastName,
+                    Email = @Email,
+                    Gender = @Gender,
+                    Active = @Active
+                WHERE UserId = @UserId
+        END
+END;
+GO
+
+CREATE OR ALTER PROCEDURE TutorialAppSchema.spUser_Upsert
+	@FirstName NVARCHAR(50),
+	@LastName NVARCHAR(50),
+	@Email NVARCHAR(50),
 	@Gender NVARCHAR(50),
 	@JobTitle NVARCHAR(50),
 	@Department NVARCHAR(50),
-	@Salary DECIMAL (18,4),
-    @Active BIT ,
-    @UserId INT = NULL 
+    @Salary DECIMAL(18, 4),
+	@Active BIT = 1,
+	@UserId INT = NULL
 AS
 BEGIN
-    IF EXISTS (SELECT * FROM TutorialAppSchema.Users WHERE UserId = @UserId) 
-        BEGIN 
-        IF EXISTS (SELECT * FROM TutorialAppSchema.Users WHERE Email = Email) 
-            BEGIN 
+    IF NOT EXISTS (SELECT * FROM TutorialAppSchema.Users WHERE UserId = @UserId)
+        BEGIN
+        IF NOT EXISTS (SELECT * FROM TutorialAppSchema.Users WHERE Email = @Email)
+            BEGIN
                 DECLARE @OutputUserId INT
 
-                INSERT INTO TutorialAppSchema.Users (
+                INSERT INTO TutorialAppSchema.Users(
                     [FirstName],
                     [LastName],
                     [Email],
@@ -38,25 +79,25 @@ BEGIN
                 INSERT INTO TutorialAppSchema.UserSalary(
                     UserId,
                     Salary
-                ) VALUES(
+                ) VALUES (
                     @OutputUserId,
                     @Salary
                 )
 
                 INSERT INTO TutorialAppSchema.UserJobInfo(
                     UserId,
-                    JobTitle,
-                    Department
-                ) VALUES(
+                    Department,
+                    JobTitle
+                ) VALUES (
                     @OutputUserId,
-                    @JobTitle,
-                    @Department
+                    @Department,
+                    @JobTitle
                 )
             END
         END
-    ELSE
+    ELSE 
         BEGIN
-            UPDATE TutorialAppSchema.Users
+            UPDATE TutorialAppSchema.Users 
                 SET FirstName = @FirstName,
                     LastName = @LastName,
                     Email = @Email,
@@ -74,4 +115,3 @@ BEGIN
                 WHERE UserId = @UserId
         END
 END
-
